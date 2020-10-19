@@ -1,6 +1,6 @@
 import { Directive, NgModule, forwardRef } from "@angular/core";
 import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { TextValueAccessor, registerElement } from "nativescript-angular";
+import { TextValueAccessor, registerElement } from "@nativescript/angular";
 
 registerElement("MaskedTextField", () => require("../masked-text-field").MaskedTextField);
 

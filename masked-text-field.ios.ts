@@ -24,7 +24,7 @@ export class MaskedTextField extends MaskedTextFieldBase {
 
     constructor() {
         super(); // NOTE: This initializes this._delegate!
-        this._delegate = MaskedTextFieldDelegate.initWithOwnerAndDefaultImplementation(new WeakRef(this), this._delegate);
+        //this._delegate = MaskedTextFieldDelegate.initWithOwnerAndDefaultImplementation(new WeakRef(this), this._delegate);
     }
 
     public [textProperty.getDefault]() {
@@ -43,14 +43,14 @@ export class MaskedTextField extends MaskedTextFieldBase {
             case "none":
                 break;
             case "underline":
-                dict.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                dict.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.Single);
                 break;
             case "line-through":
-                dict.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                dict.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.Single);
                 break;
             case "underline line-through":
-                dict.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
-                dict.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                dict.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.Single);
+                dict.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.Single);
                 break;
             default:
                 throw new Error(`Invalid text decoration value: ${style.textDecoration}. Valid values are: 'none', 'underline', 'line-through', 'underline line-through'.`);
@@ -78,8 +78,18 @@ export class MaskedTextField extends MaskedTextFieldBase {
             this.nativeView.text = source;
         }
     }
-}
 
+    public textFieldShouldChangeCharactersInRangeReplacementString(textField: UITextField, range: NSRange, replacementString: string): boolean {        
+        const isBackwardsIn: boolean = (replacementString === "");
+        const newCaretPositionNumber = this._updateMaskedText(range.location, range.length, replacementString, isBackwardsIn);
+        
+        const caretPosition = textField.positionFromPositionOffset(textField.beginningOfDocument, newCaretPositionNumber);        
+        textField.selectedTextRange = textField.textRangeFromPositionToPosition(caretPosition, caretPosition);
+
+        return false; // Always return false as we change the text ourselves, so no automatic change should happen. 
+    }    
+}
+/*
 class MaskedTextFieldDelegate extends NSObject implements UITextFieldDelegate {
     public static ObjCProtocols = [UITextFieldDelegate];
 
@@ -120,3 +130,4 @@ class MaskedTextFieldDelegate extends NSObject implements UITextFieldDelegate {
         return false; // Always return false as we change the text ourselves, so no automatic change should happen. 
     }
 }
+*/

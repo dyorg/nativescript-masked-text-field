@@ -25,7 +25,7 @@ export class MaskedTextField extends MaskedTextFieldBase {
     public createNativeView() {
         const textEdit: android.widget.EditText = super.createNativeView() as android.widget.EditText;
 
-        const textWatcher = new MaskedTextFieldTextWatcher(new WeakRef(this));
+        const textWatcher = createMaskedTextFieldTextWatcher(new WeakRef(this));
         textEdit.addTextChangedListener(textWatcher);
         (textEdit as any).textWatcher = textWatcher;
         
@@ -68,30 +68,21 @@ export class MaskedTextField extends MaskedTextFieldBase {
     }
 }
 
-@Interfaces([android.text.TextWatcher])
-class MaskedTextFieldTextWatcher extends java.lang.Object implements android.text.TextWatcher {
-    constructor(private owner: WeakRef<MaskedTextField>) {
-        super();
-
-        return global.__native(this);
-    }
-    
-    public beforeTextChanged(s: string /* java.lang.CharSequence */, start: number, count: number, after: number) {
-        // NOT NEEDED
-    }
-
-    public onTextChanged(s: string /* java.lang.CharSequence */, start: number, before: number, count: number) {
-        const owner = this.owner.get();
-        if (!owner._isChangingNativeTextIn) {
-            const changedText = s.toString().substr(start, count);
-            const isBackwardsIn: boolean = (count === 0);
-            const newCaretPosition = owner._updateMaskedText(start, before, changedText, isBackwardsIn);
-            const editText: android.widget.EditText = owner.nativeView as android.widget.EditText;
-            editText.setSelection(newCaretPosition);
-        }    
-    }
-
-    public afterTextChanged(s: any): void {
-        // NOT NEEDED
-    }    
+function createMaskedTextFieldTextWatcher(_owner) {
+    return new android.text.TextWatcher({
+        beforeTextChanged: function(s, start, count, after) {
+        },
+        onTextChanged: function(s, start, before, count) {
+            const owner = _owner.get();
+            if (!owner._isChangingNativeTextIn) {
+                const changedText = s.toString().substr(start, count);
+                const isBackwardsIn = (count === 0);
+                const newCaretPosition = owner._updateMaskedText(start, before, changedText, isBackwardsIn);
+                const editText = owner.nativeView;
+                editText.setSelection(newCaretPosition);
+            }
+        },
+        afterTextChanged: function(s) {
+        }
+    });    
 }
