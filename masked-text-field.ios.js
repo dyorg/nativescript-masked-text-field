@@ -1,20 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MaskedTextField = void 0;
-const text_base_1 = require("ui/text-base");
-const masked_text_field_common_1 = require("./masked-text-field-common");
-__exportStar(require("./masked-text-field-common"), exports);
-class MaskedTextField extends masked_text_field_common_1.MaskedTextFieldBase {
+import { getTransformedText } from "@nativescript/core/ui";
+import { MaskedTextFieldBase, textProperty } from "./masked-text-field-common";
+export * from "./masked-text-field-common";
+export class MaskedTextField extends MaskedTextFieldBase {
     constructor() {
         super();
     }
-    [masked_text_field_common_1.textProperty.getDefault]() {
+    [textProperty.getDefault]() {
         return "";
     }
-    [masked_text_field_common_1.textProperty.setNative](value) {
-        this._setNativeText(value);
+    [textProperty.setNative](value) {
+        this.__setNativeText(value);
     }
-    _setNativeText(value) {
+    __setNativeText(value) {
         const style = this.style;
         const dict = new Map();
         switch (style.textDecoration) {
@@ -40,7 +37,7 @@ class MaskedTextField extends masked_text_field_common_1.MaskedTextFieldBase {
             dict.set(NSForegroundColorAttributeName, style.color.ios);
         }
         const stringValue = (value === undefined || value === null) ? "" : value.toString();
-        const source = text_base_1.getTransformedText(stringValue, this.textTransform);
+        const source = getTransformedText(stringValue, this.textTransform);
         if (dict.size > 0) {
             const result = NSMutableAttributedString.alloc().initWithString(source);
             result.setAttributesRange(dict, { location: 0, length: source.length });
@@ -59,4 +56,3 @@ class MaskedTextField extends masked_text_field_common_1.MaskedTextFieldBase {
         return false;
     }
 }
-exports.MaskedTextField = MaskedTextField;

@@ -13,12 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { CoercibleProperty, Property } from "ui/core/view";
-import { TextField } from "ui/text-field";
+import { CoercibleProperty, Property } from "@nativescript/core/ui/core/view";
+import { TextField } from "@nativescript/core/ui/text-field";
+
 
 import { MaskedTextField as MaskedTextFieldDefinition } from ".";
 
-export * from "ui/text-field";
+export * from "@nativescript/core/ui/text-field";
 
 export abstract class MaskedTextFieldBase extends TextField implements MaskedTextFieldDefinition {
     public mask: string;
@@ -44,7 +45,7 @@ export abstract class MaskedTextFieldBase extends TextField implements MaskedTex
         const newMaskedValue = this._getNewMaskedValue(start, start + previousCharactersCount, unmaskedChangedValue, isBackwardsIn);
 
         // NOTE: Do not set directly the owner.text property as this will trigger an unnecessary coerce value and masking/unmasking!            
-        this._setNativeText(newMaskedValue);
+        this.__setNativeText(newMaskedValue);
         textProperty.nativeValueChange(this, newMaskedValue);
 
         let newCaretPosition = this._getNextRegExpToken(start, isBackwardsIn);
@@ -148,7 +149,7 @@ export abstract class MaskedTextFieldBase extends TextField implements MaskedTex
         return currentValueSplit.join("");        
     }
 
-    protected abstract _setNativeText(value: string);
+    protected abstract __setNativeText(value: string);
 
     private _getNextRegExpToken(start: number, isBackwardsIn?: boolean) {
         const step = (isBackwardsIn ? -1 : 1);

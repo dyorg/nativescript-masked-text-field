@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { getTransformedText } from "ui/text-base";
+import { getTransformedText } from "@nativescript/core/ui";
 
 import { MaskedTextFieldBase, textProperty } from "./masked-text-field-common";
 
@@ -32,10 +32,10 @@ export class MaskedTextField extends MaskedTextFieldBase {
     }
 
     public [textProperty.setNative](value: string) {
-        this._setNativeText(value);
+        this.__setNativeText(value);
     }
 
-    public _setNativeText(value: string) {
+    public __setNativeText(value: string) {
         const style = this.style;
 
         const dict = new Map<string, any>();

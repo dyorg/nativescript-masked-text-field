@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MaskedTextField = void 0;
-const text_base_1 = require("ui/text-base");
-const masked_text_field_common_1 = require("./masked-text-field-common");
-__exportStar(require("./masked-text-field-common"), exports);
-class MaskedTextField extends masked_text_field_common_1.MaskedTextFieldBase {
+import { getTransformedText } from "@nativescript/core/ui";
+import { MaskedTextFieldBase, textProperty } from "./masked-text-field-common";
+export * from "./masked-text-field-common";
+export class MaskedTextField extends MaskedTextFieldBase {
     constructor() {
         super(...arguments);
         this._isChangingNativeTextIn = false;
@@ -27,21 +24,20 @@ class MaskedTextField extends masked_text_field_common_1.MaskedTextFieldBase {
         nativeView.textWatcher.owner = null;
         super.disposeNativeView();
     }
-    [masked_text_field_common_1.textProperty.getDefault]() {
+    [textProperty.getDefault]() {
         this.nativeView.getText();
     }
-    [masked_text_field_common_1.textProperty.setNative](value) {
-        this._setNativeText(value);
+    [textProperty.setNative](value) {
+        this.__setNativeText(value);
     }
-    _setNativeText(value) {
+    __setNativeText(value) {
         const stringValue = (value === null || value === undefined) ? "" : value.toString();
-        const transformedText = text_base_1.getTransformedText(stringValue, this.textTransform);
+        const transformedText = getTransformedText(stringValue, this.textTransform);
         this._isChangingNativeTextIn = true;
         this.nativeView.setText(transformedText);
         this._isChangingNativeTextIn = false;
     }
 }
-exports.MaskedTextField = MaskedTextField;
 function createMaskedTextFieldTextWatcher(_owner) {
     return new android.text.TextWatcher({
         beforeTextChanged: function (s, start, count, after) {

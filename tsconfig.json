@@ -7,14 +7,15 @@
         "declaration": false,
         "experimentalDecorators": true,
         "target": "es2017",
-        "module": "commonjs",
+        "module": "esnext",
+        "moduleResolution": "node",
         "outDir": ".",
         "lib": ["es6", "dom", "es2017"],
         "rootDir": ".",
         "baseUrl": ".",
         "paths": {
             "*": [
-            "./node_modules/tns-core-modules/*",
+            "./node_modules/@nativescript/*",
             "./node_modules/*"
             ]
         }

@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.textProperty = exports.maskProperty = exports.MaskedTextFieldBase = void 0;
-const view_1 = require("ui/core/view");
-const text_field_1 = require("ui/text-field");
-__exportStar(require("ui/text-field"), exports);
-class MaskedTextFieldBase extends text_field_1.TextField {
+import { CoercibleProperty, Property } from "@nativescript/core/ui/core/view";
+import { TextField } from "@nativescript/core/ui/text-field";
+export * from "@nativescript/core/ui/text-field";
+export class MaskedTextFieldBase extends TextField {
     constructor() {
         super(...arguments);
         this._emptyMaskedValue = "";
@@ -25,8 +22,8 @@ class MaskedTextFieldBase extends text_field_1.TextField {
     _updateMaskedText(start, previousCharactersCount, newText, isBackwardsIn) {
         const unmaskedChangedValue = this._getUnmaskedValue(newText, start);
         const newMaskedValue = this._getNewMaskedValue(start, start + previousCharactersCount, unmaskedChangedValue, isBackwardsIn);
-        this._setNativeText(newMaskedValue);
-        exports.textProperty.nativeValueChange(this, newMaskedValue);
+        this.__setNativeText(newMaskedValue);
+        textProperty.nativeValueChange(this, newMaskedValue);
         let newCaretPosition = this._getNextRegExpToken(start, isBackwardsIn);
         if (newCaretPosition === -1) {
             newCaretPosition = start + (isBackwardsIn ? 1 : 0);
@@ -117,16 +114,15 @@ class MaskedTextFieldBase extends text_field_1.TextField {
         return -1;
     }
 }
-exports.MaskedTextFieldBase = MaskedTextFieldBase;
-exports.maskProperty = new view_1.Property({
+export const maskProperty = new Property({
     name: "mask",
     defaultValue: "",
     valueChanged: (target, oldValue, newValue) => {
         target._generateMaskTokens();
     }
 });
-exports.maskProperty.register(MaskedTextFieldBase);
-exports.textProperty = new view_1.CoercibleProperty({
+maskProperty.register(MaskedTextFieldBase);
+export const textProperty = new CoercibleProperty({
     name: "text",
     defaultValue: null,
     coerceValue: (target, value) => {
@@ -137,4 +133,4 @@ exports.textProperty = new view_1.CoercibleProperty({
         return target._getNewMaskedValue(0, target._emptyMaskedValue.length, unmaskedValue);
     }
 });
-exports.textProperty.register(MaskedTextFieldBase);
+textProperty.register(MaskedTextFieldBase);
