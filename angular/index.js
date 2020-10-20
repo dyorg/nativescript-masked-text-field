@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MaskedTextFieldModule = void 0;
+exports.MaskedTextFieldModule = exports.MaskedTextValueAccessor = void 0;
 const core_1 = require("@angular/core");
 const forms_1 = require("@angular/forms");
 const angular_1 = require("@nativescript/angular");
@@ -17,6 +17,7 @@ MaskedTextValueAccessor = __decorate([
         providers: [MASKED_TEXT_VALUE_ACCESSOR]
     })
 ], MaskedTextValueAccessor);
+exports.MaskedTextValueAccessor = MaskedTextValueAccessor;
 let MaskedTextFieldModule = class MaskedTextFieldModule {
 };
 MaskedTextFieldModule = __decorate([
