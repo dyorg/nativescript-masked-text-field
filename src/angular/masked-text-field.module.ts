@@ -13,14 +13,17 @@ limitations under the License.
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
-import { isKnownView, registerElement } from "@nativescript/angular/element-registry";
-import { NativeScriptFormsModule } from "@nativescript/angular";
+import { isKnownView, registerElement, NativeScriptFormsModule } from "@nativescript/angular";
 
-import { MaskedTextValueAccessor } from "./masked-text-value-accessor";
+
+import { MaskedTextValueAccessor } from "./masked-text-field.directive";
+
+import { MaskedTextField } from '../masked-text-field'
 
 if (!isKnownView("MaskedTextField")) {
-    registerElement("MaskedTextField", () => require("../masked-text-field").MaskedTextField);
+    registerElement("MaskedTextField", () => MaskedTextField);
 }
+
 
 @NgModule({
     declarations: [
@@ -38,3 +41,5 @@ if (!isKnownView("MaskedTextField")) {
 })
 export class MaskedTextFieldModule {
 }
+
+
